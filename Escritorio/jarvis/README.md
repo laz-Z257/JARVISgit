@@ -12,8 +12,8 @@ Asistente personal de IA 100% open source, gratuito, local. Celular como núcleo
 - **Sincronización automática** — Celu y PC comparten la misma cuenta via Tailscale
 - **Privacidad total** — Todo local, $0, sin APIs cloud
 - **Modo sigilo** — No guarda audio, no loguea, no escribe DB
-- **Dashboard web** — Interfaz oscura estilo reactor arc (FastAPI + WebSockets)
-- **App mobile** — Flutter (Android + iOS) con UI estilo Jarvis
+- **PC en segundo plano** — Corre como daemon, solo un ícono en la bandeja del sistema que cambia de color
+- **App mobile** — Flutter (Android + iOS), UI minimalista: solo un anillo flotante que pulsa y reacciona
 
 ---
 
@@ -139,126 +139,92 @@ flutter run
 | 1. Core servidor PC | 12h |
 | 2. Skills PC esenciales | 12h |
 | 3. Skills PC avanzados | 10h |
-| 4. Web Dashboard | 6h |
+| 4. Servidor WebSocket + Dashboard opcional | 4h |
 | 5. Sistema conversacional + aprendizaje | 12h |
 | 6. App Flutter: base + conexión | 8h |
 | 7. App Flutter: modo autónomo | 8h |
 | 8. Skills mobile esenciales | 10h |
 | 9. Skills mobile avanzados + UI | 8h |
 | 10. Pruebas, sync, ajustes | 6h |
-| **TOTAL** | **~92 horas (~5-6 semanas)** |
+| **TOTAL** | **~90 horas (~5 semanas)** |
 
 ---
 
-## Prompt para diseño UI (v0.dev, Galileo AI, Figma AI, DALL-E, etc.)
+## Diseño UI
 
-Copiá y pegá todo este bloque en una herramienta de diseño IA para generar las vistas:
+Jarvis es discreto. No invade. Está ahí y reacciona cuando le hablás.
+
+### App Mobile
+- Fondo: degradé azul muy oscuro a negro (#0A0E17 → #000000)
+- Partículas azules flotando MUY sutiles (opacidad 10-15%)
+- Centro: anillo flotante (~120px) con glow, cambia según estado
+- Debajo del anillo: texto de respuesta con fade suave
+- Toque largo = activar micrófono manual
+- Esquina superior derecha: puntito verde (PC online) o gris (offline)
+- Esquina superior izquierda: puntito rojo (modo sigilo activo)
+
+Estados del anillo:
+- Azul cian (#00D4FF) = idle, pulso lento cada 3s, gira suave
+- Blanco = wake word detectado, expansión rápida
+- Naranja (#FF6B35) = pensando, anillos concéntricos girando
+- Verde (#00FF88) = hablando, expansión/contracción rítmica
+- Rojo (#FF3366) = modo sigilo, opaco, pulso mínimo
+- Gris = sin conexión
+
+### PC (segundo plano)
+- Sin ventana. Corre como daemon de fondo.
+- Solo un ícono en la bandeja del sistema (16x16 o 24x24)
+- Mismos colores que el anillo mobile según estado
+- Click derecho: Activar micrófono | Modo sigilo | Salir
+
+### Prompt para generar las vistas (v0.dev, Galileo AI, Figma AI, etc.)
 
 ```
-Diseñame las interfaces completas de J.A.R.V.I.S., un asistente de voz 
-IA tipo mayordomo británico estilo Tony Stark. App mobile Flutter + 
-dashboard web PC. Oscuro, neón, reactor arc.
+Diseñame la UI de J.A.R.V.I.S., asistente de voz IA tipo mayordomo 
+británico. Minimalista. Dos interfaces: mobile con anillo flotante, 
+y PC en segundo plano con ícono en bandeja del sistema.
 
-========== PALETA DE COLORES ==========
-Fondo principal: #0A0E17 (azul casi negro)
-Fondo secundario: #121826
-Acento cian (reactor): #00D4FF
-Acento naranja (alertas): #FF6B35
-Texto principal: #E0E6ED
-Texto secundario: #8892A4
-Verde terminal: #00FF88
+========== APP MOBILE ==========
+- Fondo: degradé azul muy oscuro a negro (#0A0E17 → #000000)
+- Partículas azules flotando MUY sutiles (opacidad 10-15%)
+- Centro: anillo flotante (~120px) con glow cian suave (#00D4FF)
+- Debajo del anillo: texto de respuesta con fade suave
+- Toque largo = activar micrófono manual
+- Esquina superior derecha: puntito verde (PC online) o gris (offline)
+- Esquina superior izquierda: puntito rojo (modo sigilo activo)
+
+Estados del anillo:
+- Idle: azul cian, pulso lento cada 3s, gira suave
+- Wake word: expansión rápida 20%, glow blanco
+- Escuchando: micropulsaciones reaccionando a la voz
+- Pensando: anillos concéntricos naranja (#FF6B35) girando
+- Hablando: verde cian (#00FF88), expansión/contracción rítmica
+- Skill ejecutando: destello rápido según tipo (SMS=verde, cámara=flash)
+- Sigilo: rojo suave (#FF3366), opaco, pulso mínimo
+- Error: titila blanco 2 veces
+- Offline: gris azulado opaco
+
+========== PC — SYSTEM TRAY (SEGUNDO PLANO) ==========
+- Sin ventana. Sin dashboard. Corre de fondo como daemon.
+- Solo un ícono en la bandeja del sistema (16x16 o 24x24)
+- Mismos colores que el anillo mobile según estado
+- Click derecho en el ícono:
+    Activar micrófono | Modo sigilo | Salir
+
+========== COLORES ==========
+Fondo: #0A0E17
+Cian idle: #00D4FF
+Blanco wake: #FFFFFF
+Naranja pensar: #FF6B35
+Verde hablar: #00FF88
 Rojo sigilo: #FF3366
+Gris offline: #5A6A7A
+Texto: #E0E6ED
+Tipografía: Inter
 
-========== TIPOGRAFÍA ==========
-Títulos: Orbitron Bold
-Cuerpo: Inter
-Terminal: JetBrains Mono
-
-========== ANIMACIONES ==========
-- Partículas azules flotando en fondo (sutiles, opacidad 20-40%)
-- Anillo reactor arc central pulsando según estado
-- Ondas ecualizador que reaccionan a la voz
-- Glow neón en bordes y acentos
-- Transiciones 300ms ease-in-out
-
-========== ESTADOS DEL ANILLO REACTOR ARC ==========
-Azul suave = idle/escuchando
-Blanco = wake word detectado
-Naranja/ámbar = procesando/pensando
-Cian = hablando (TTS)
-Rojo = modo sigilo activo
-
-========== 1. APP MOBILE — PANTALLA PRINCIPAL ==========
-[SUPERIOR]
-- Hora digital grande (Orbitron)
-- Fecha debajo
-- Clima en esquina superior derecha (ícono + temp)
-- Puntito conexión: verde = PC online, gris = modo autónomo
-
-[CENTRO]
-- Anillo reactor arc animado (pulsación según estado)
-- Última respuesta de Jarvis en texto dentro del anillo (fade out)
-- Íconos de skills activos recientes debajo del anillo
-
-[INFERIOR]
-- Barra rápida: SIGILO | RUTINAS | NOTAS | AJUSTES
-- Botón micrófono flotante abajo-centro
-
-========== 2. APP MOBILE — HISTORIAL DE CONVERSACIÓN ==========
-- Acceso: deslizar hacia arriba desde pantalla principal
-- Lista tipo chat con burbujas:
-  • Usuario: derecha, azul oscuro translúcido, bordes redondeados
-  • Jarvis: izquierda, gris oscuro translúcido, bordes redondeados
-- Timestamp chico debajo de cada burbuja
-- Barra superior: "Conversación" + volver + borrar
-- Input de texto abajo (alternativa a voz)
-
-========== 3. APP MOBILE — AJUSTES ==========
-Secciones:
-- CONEXIÓN: IP server, estado Tailscale, dispositivos vinculados
-- VOZ: selector voz (masculina/femenina británica), velocidad, volumen
-- PERSONALIDAD: slider sarcasmo, slider formalidad, toggle conversacional
-- PRIVACIDAD: toggle modo sigilo default, botón "Borrar memoria" (rojo)
-- DATOS: tamaño DB, último sync, botón "Sincronizar ahora"
-
-========== 4. WEB DASHBOARD PC — FULLSCREEN ==========
-Layout 3 columnas:
-
-[COLUMNA IZQUIERDA — ESTADO]
-- Gráfico circular CPU (% + gradiente verde→rojo)
-- Gráfico circular RAM (%)
-- Gráfico circular Disco (%)
-- Temperatura CPU, Uptime
-- Estado servidor: ONLINE/OFFLINE
-
-[COLUMNA CENTRAL — CONVERSACIÓN]
-- "J.A.R.V.I.S. — Sistema Activo"
-- Área conversación tipo terminal (texto verde neón #00FF88 sobre negro)
-- Línea de tiempo con timestamps, auto-scroll
-- Ecualizador de audio horizontal debajo
-- Botón "Activar micrófono" / "Silenciar"
-
-[COLUMNA DERECHA — DATOS]
-- Tarjeta clima (ícono grande + temperatura)
-- Próximos eventos calendario
-- Últimas notas tomadas
-- Resumen gastos del mes
-- Dispositivos conectados (celu online/offline)
-- Estado modo sigilo
-
-[ENCABEZADO SUPERIOR]
-- Logo "J.A.R.V.I.S." (Orbitron)
-- Hora digital
-- Navegación: Dashboard | Conversación | Skills | Ajustes
-
-========== REFERENCIAS VISUALES ==========
-- UI de Iron Man (Marvel) — pantallas holográficas azules
-- HUD películas — Minority Report, Oblivion
-- Interfaces cyberpunk oscuras con neón
-
-El asistente tiene 56 skills (32 PC, 24 celu). Es conversacional con 
-personalidad británica, sarcasmo, memoria y aprendizaje continuo. 
-Se comunica via Tailscale VPN. Todo local, $0, open source.
+========== REFERENCIA ==========
+Algo etéreo, como el anillo de Cortana pero más oscuro y discreto.
+La vibra de un mayordomo británico que está ahí sin molestar.
 ```
 
 ---
@@ -266,5 +232,3 @@ Se comunica via Tailscale VPN. Todo local, $0, open source.
 ## Licencia
 
 MIT — 100% open source.
-
-# JARVIS

@@ -37,7 +37,7 @@ Skills siempre activos:                 Skills pesados:
 | Comunicación | Tailscale VPN ($0) | Tailscale VPN ($0) |
 | Framework mobile | Flutter (Android + iOS) | — |
 | Server | — | FastAPI + WebSockets |
-| Dashboard | — | FastAPI + Jinja2 |
+| UI PC | — | Ícono en bandeja del sistema (pystray) |
 | Costo total | $0 | $0 |
 
 ---
@@ -68,8 +68,9 @@ jarvis/
 │   │   ├── proactive.py                       # Sugerencias proactivas
 │   │   ├── context.py                         # Contexto ambiental
 │   │   ├── privacy.py                         # Modo sigilo
-│   │   ├── session_manager.py                 # Multi-dispositivo
+                                                                 │   │   ├── session_manager.py                 # Multi-dispositivo
 │   │   ├── sync_engine.py                     # Sync celu ↔ PC
+│   │   ├── tray.py                            # Ícono en bandeja del sistema (segundo plano)
 │   │   └── config_loader.py                   # Cargar config.yaml
 │   │
 │   ├── skills/
@@ -105,14 +106,11 @@ jarvis/
 │   │   ├── inbox.py                           # Leer bandeja mail
 │   │   └── mobile_bridge.py                   # Skills del celu viajan al server
 │   │
-│   ├── web/
+│   ├── web/                                    # Dashboard opcional (debug)
 │   │   ├── __init__.py
 │   │   ├── server.py                          # FastAPI + WebSocket + REST
-│   │   ├── static/
-│   │   │   ├── css/jarvis.css                 # Estilo oscuro + reactor arc
-│   │   │   └── js/jarvis.js, animations.js    # Lógica dashboard
 │   │   └── templates/
-│   │       └── index.html                     # Dashboard tipo Jarvis
+│   │       └── index.html                     # Página opcional de debug
 │   │
 │   ├── models/                                # Gitignored
 │   │   ├── wake_word/
@@ -346,11 +344,11 @@ server/main.py
 server/core/
   jarvis_engine.py, wake_word.py, speech_to_text.py
   text_to_speech.py, brain.py, memory.py
-  config_loader.py, privacy.py, context.py
+  config_loader.py, privacy.py, context.py, tray.py
 server/models/ (descarga de modelos)
 server/memory/ (creación de DB)
 ```
-**Objetivo**: "Jarvis, qué hora es?" → responde con TTS desde la PC.
+**Objetivo**: "Jarvis, qué hora es?" → responde con TTS desde la PC. PC corre en segundo plano, solo ícono en bandeja.
 
 ### Fase 2 — Skills PC esenciales (12h)
 ```
@@ -373,15 +371,13 @@ server/skills/
 ```
 **Objetivo**: 32 skills PC completos.
 
-### Fase 4 — Web Dashboard (6h)
+### Fase 4 — Servidor WebSocket + Dashboard opcional (4h)
 ```
 server/web/
   server.py (FastAPI + WebSocket)
-  templates/index.html
-  static/css/jarvis.css
-  static/js/jarvis.js, animations.js
+  templates/index.html (página mínima de debug)
 ```
-**Objetivo**: Dashboard funcional + API WebSocket para futuro cliente mobile.
+**Objetivo**: API WebSocket funcional para cliente mobile. Dashboard opcional solo para debug.
 
 ### Fase 5 — Sistema conversacional + aprendizaje (12h)
 ```
@@ -455,16 +451,16 @@ mobile/ui/conversation.dart, widgets/arc_ring.dart
 | 1 | Core servidor PC | 12h |
 | 2 | Skills PC esenciales | 12h |
 | 3 | Skills PC avanzados | 10h |
-| 4 | Web Dashboard | 6h |
+| 4 | Servidor WebSocket + Dashboard opcional | 4h |
 | 5 | Sistema conversacional + aprendizaje | 12h |
 | 6 | App Flutter: base + conexión | 8h |
 | 7 | App Flutter: modo autónomo | 8h |
 | 8 | Skills mobile esenciales | 10h |
 | 9 | Skills mobile avanzados + UI | 8h |
 | 10 | Pruebas, sync, ajustes | 6h |
-| **TOTAL** | | **~92 horas** |
+| **TOTAL** | | **~90 horas** |
 
-**~5-6 semanas** en sesiones de 3-4 horas/día.
+**~5 semanas** en sesiones de 3-4 horas/día.
 
 ---
 
