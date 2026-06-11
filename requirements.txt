@@ -1,0 +1,60 @@
+# STT / Wake Word
+faster-whisper
+openwakeword
+pyaudio
+numpy
+
+# LLM
+ollama
+
+# TTS
+edge-tts
+
+# Web server
+fastapi
+uvicorn[standard]
+websockets
+jinja2
+python-multipart
+
+# Config / DB
+pyyaml
+apscheduler
+
+# System
+psutil
+pyautogui
+python-xlib
+
+# Web / Scraping
+requests
+beautifulsoup4
+feedparser
+duckduckgo-search
+speedtest-cli
+
+# Skills específicos
+spotipy
+google-auth-oauthlib
+google-api-python-client
+icalendar
+python-telegram-bot
+gitpython
+qrcode
+pillow
+mss
+chromadb
+sentence-transformers
+
+# Finanzas
+tabulate
+pandas
+
+# Red
+scapy
+
+# Seguridad
+cryptography
+
+# Tray icon
+pystray
