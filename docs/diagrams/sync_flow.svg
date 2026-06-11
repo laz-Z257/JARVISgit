@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 580" font-family="Inter, 'Segoe UI', Arial, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0A0E17"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </linearGradient>
+    <marker id="arrowCian" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#00D4FF"/>
+    </marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#00FF88"/>
+    </marker>
+  </defs>
+
+  <rect width="800" height="580" fill="url(#bg)"/>
+
+  <text x="400" y="35" text-anchor="middle" fill="#00D4FF" font-size="18" font-weight="700" letter-spacing="3">SINCRONIZACIÓN CELULAR ↔ PC</text>
+  <line x1="150" y1="45" x2="650" y2="45" stroke="#00D4FF" stroke-opacity="0.3" stroke-width="1"/>
+
+  <!-- COLUMNA CELULAR -->
+  <rect x="30" y="70" width="280" height="480" rx="10" fill="#131A26" stroke="#1E293B" stroke-width="1.5"/>
+  <text x="170" y="100" text-anchor="middle" fill="#00D4FF" font-size="13" font-weight="600">📱 CELULAR</text>
+  <text x="170" y="115" text-anchor="middle" fill="#5A6A7A" font-size="10">jarvis_mobile.db</text>
+
+  <!-- COLUMNA PC -->
+  <rect x="490" y="70" width="280" height="480" rx="10" fill="#131A26" stroke="#1E293B" stroke-width="1.5"/>
+  <text x="630" y="100" text-anchor="middle" fill="#00D4FF" font-size="13" font-weight="600">🖥️ PC</text>
+  <text x="630" y="115" text-anchor="middle" fill="#5A6A7A" font-size="10">jarvis.db (maestra)</text>
+
+  <!-- Flecha central (Tailscale) -->
+  <line x1="310" y1="130" x2="490" y2="130" stroke="#00D4FF" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.4"/>
+  <text x="400" y="125" text-anchor="middle" fill="#5A6A7A" font-size="8" letter-spacing="1">TAILSCALE VPN</text>
+
+  <!-- Paso 1: PC se prende -->
+  <rect x="500" y="135" width="260" height="35" rx="6" fill="#1E293B" stroke="#334155" stroke-width="1"/>
+  <text x="630" y="155" text-anchor="middle" fill="#E0E6ED" font-size="11">1. PC se prende</text>
+  <text x="630" y="166" text-anchor="middle" fill="#5A6A7A" font-size="9">Tailscale conecta automáticamente</text>
+
+  <!-- Flecha paso 1 → 2 -->
+  <line x1="630" y1="170" x2="630" y2="185" stroke="#00FF88" stroke-width="1.5" marker-end="url(#arrowGreen)"/>
+
+  <!-- Paso 2: Detecta PC online -->
+  <rect x="50" y="188" width="240" height="35" rx="6" fill="#1E293B" stroke="#334155" stroke-width="1"/>
+  <text x="170" y="208" text-anchor="middle" fill="#E0E6ED" font-size="11">2. Detecta PC online</text>
+  <text x="170" y="219" text-anchor="middle" fill="#5A6A7A" font-size="9">connection_manager.dart</text>
+
+  <!-- Flecha paso 2 → 3 (celu → pc) -->
+  <path d="M 290 205 L 490 205" stroke="#00D4FF" stroke-width="1.5" fill="none" marker-end="url(#arrowCian)"/>
+  <text x="390" y="200" text-anchor="middle" fill="#94A3B8" font-size="9">GET /sync/status</text>
+
+  <!-- Paso 3: PC responde -->
+  <rect x="500" y="195" width="260" height="35" rx="6" fill="#1E293B" stroke="#334155" stroke-width="1"/>
+  <text x="630" y="215" text-anchor="middle" fill="#E0E6ED" font-size="11">3. Responde estado</text>
+  <text x="630" y="226" text-anchor="middle" fill="#94A3B8" font-size="9">→ {version: 42, pendientes: 5}</text>
+
+  <!-- Flecha paso 3 → 4 (pc → celu) -->
+  <path d="M 500 220 L 290 220" stroke="#00FF88" stroke-width="1.5" fill="none" marker-end="url(#arrowGreen)"/>
+
+  <!-- Paso 4: Envía cola de sync -->
+  <rect x="50" y="248" width="240" height="35" rx="6" fill="#1E293B" stroke="#334155" stroke-width="1"/>
+  <text x="170" y="268" text-anchor="middle" fill="#E0E6ED" font-size="11">4. Envía cola_sync</text>
+  <text x="170" y="279" text-anchor="middle" fill="#94A3B8" font-size="9">POST /sync/push</text>
+
+  <!-- Flecha paso 4 → 5 -->
+  <path d="M 290 265 L 490 265" stroke="#00D4FF" stroke-width="1.5" fill="none" marker-end="url(#arrowCian)"/>
+
+  <!-- Paso 5: PC mergea -->
+  <rect x="500" y="255" width="260" height="50" rx="6" fill="#1E293B" stroke="#00FF88" stroke-width="1.5"/>
+  <text x="630" y="275" text-anchor="middle" fill="#00FF88" font-size="11">5. Merge en DB maestra</text>
+  <text x="630" y="290" text-anchor="middle" fill="#94A3B8" font-size="9">Resuelve conflictos (timestamp)</text>
+  <text x="630" y="301" text-anchor="middle" fill="#5A6A7A" font-size="8">Última escritura gana</text>
+
+  <!-- Flecha paso 5 → 6 -->
+  <line x1="630" y1="305" x2="630" y2="320" stroke="#00FF88" stroke-width="1.5" marker-end="url(#arrowGreen)"/>
+
+  <!-- Paso 6: PC envía novedades -->
+  <rect x="500" y="323" width="260" height="35" rx="6" fill="#1E293B" stroke="#334155" stroke-width="1"/>
+  <text x="630" y="343" text-anchor="middle" fill="#E0E6ED" font-size="11">6. Envía novedades</text>
+  <text x="630" y="354" text-anchor="middle" fill="#94A3B8" font-size="9">→ {ok, novedades: {...}}</text>
+
+  <!-- Flecha paso 6 → 7 -->
+  <path d="M 500 340 L 290 340" stroke="#00FF88" stroke-width="1.5" fill="none" marker-end="url(#arrowGreen)"/>
+
+  <!-- Paso 7: Celu actualiza -->
+  <rect x="50" y="328" width="240" height="35" rx="6" fill="#1E293B" stroke="#334155" stroke-width="1"/>
+  <text x="170" y="348" text-anchor="middle" fill="#E0E6ED" font-size="11">7. Actualiza cache local</text>
+  <text x="170" y="359" text-anchor="middle" fill="#5A6A7A" font-size="9">Nuevas rutinas, preferencias</text>
+
+  <!-- Flecha paso 7 → 8 -->
+  <line x1="170" y1="363" x2="170" y2="380" stroke="#00D4FF" stroke-width="1.5" marker-end="url(#arrowCian)"/>
+
+  <!-- Paso 8: Celu limpia cola -->
+  <rect x="50" y="383" width="240" height="35" rx="6" fill="#1E293B" stroke="#334155" stroke-width="1"/>
+  <text x="170" y="403" text-anchor="middle" fill="#E0E6ED" font-size="11">8. Limpia cola_sync</text>
+  <text x="170" y="414" text-anchor="middle" fill="#00FF88" font-size="9">✅ Sync completado</text>
+
+  <!-- Tabla de resolución de conflictos -->
+  <rect x="50" y="440" width="720" height="95" rx="8" fill="#0F172A" stroke="#FF6B35" stroke-width="1"/>
+  <text x="410" y="460" text-anchor="middle" fill="#FF6B35" font-size="12" font-weight="600">⚡ REGLAS DE CONFLICTO</text>
+  <line x1="70" y1="468" x2="750" y2="468" stroke="#334155" stroke-width="1"/>
+
+  <text x="80" y="485" fill="#E0E6ED" font-size="10">● Última escritura gana (por timestamp)</text>
+  <text x="80" y="500" fill="#E0E6ED" font-size="10">● Notas y gastos → merge por ID único</text>
+  <text x="420" y="485" fill="#E0E6ED" font-size="10">● Preferencias → PC tiene prioridad</text>
+  <text x="420" y="500" fill="#E0E6ED" font-size="10">● Contactos → Celular tiene prioridad</text>
+  <text x="250" y="520" text-anchor="middle" fill="#5A6A7A" font-size="9">Sync es bidireccional en cada tabla</text>
+</svg>
