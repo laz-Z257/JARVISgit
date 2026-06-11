@@ -1,0 +1,49 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# Modelos descargados
+server/models/wake_word/*
+server/models/whisper/*
+!server/models/wake_word/.gitkeep
+!server/models/whisper/.gitkeep
+
+# Bases de datos
+server/memory/jarvis.db
+memory/jarvis.db
+server/memory/chroma/*
+!server/memory/chroma/.gitkeep
+
+# Flutter
+mobile/build/
+mobile/.dart_tool/
+mobile/.packages
+mobile/.pub/
+mobile/pubspec.lock
+mobile/.flutter-plugins
+mobile/.flutter-plugins-dependencies
+mobile/android/.gradle/
+mobile/android/local.properties
+mobile/ios/Pods/
+mobile/ios/.symlinks/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+*.log
+
+# Config local
+.env
+*.local.yaml
